@@ -116,6 +116,7 @@ module.exports = function(source) {
 					}
 				}
 			}, function (node, replace) {
+				return;
 				if (node.type === "Include" && !(node.block && node.block.nodes.length) && !node.file.ast._mustBeInlined) {
 					replace({
 						type: "Code",
