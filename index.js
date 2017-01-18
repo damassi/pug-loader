@@ -2,6 +2,7 @@ var path = require("path");
 var dirname = path.dirname;
 var loaderUtils = require("loader-utils");
 var nodeResolve = require("resolve").sync;
+var walk = require('pug-walk');
 
 module.exports = function(source) {
 	this.cacheable && this.cacheable();
@@ -10,15 +11,13 @@ module.exports = function(source) {
 	modulePaths.pug = require.resolve("pug");
 	modulePaths.load = nodeResolve("pug-load", {basedir: dirname(modulePaths.pug)});
 	modulePaths.runtime = nodeResolve("pug-runtime", {basedir: dirname(modulePaths.pug)});
-	modulePaths.walk = nodeResolve("pug-walk", {basedir: dirname(modulePaths.pug)});
 
 	var pug = require(modulePaths.pug);
 	var load = require(modulePaths.load);
-	var walk = require(modulePaths.walk);
 
 	var req = loaderUtils.getRemainingRequest(this).replace(/^!/, "");
 
-	var query = loaderUtils.parseQuery(this.query);
+	var query = loaderUtils.getLoaderConfig(this, "pugLoader");
 
 	var loadModule = this.loadModule;
 	var resolve = this.resolve;
