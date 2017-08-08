@@ -17,7 +17,7 @@ module.exports = function(source) {
 
 	var req = loaderUtils.getRemainingRequest(this).replace(/^!/, "");
 
-	var query = loaderUtils.getLoaderConfig(this, "pugLoader");
+	var query = loaderUtils.getOptions(this);
 
 	var loadModule = this.loadModule;
 	var resolve = this.resolve;
@@ -153,7 +153,8 @@ module.exports = function(source) {
 				missingFileMode = false;
 				return;
 			}
-			throw e;
+			loaderContext.callback(e);
+			return;
 		}
 		var runtime = "var pug = require(" + loaderUtils.stringifyRequest(loaderContext, "!" + modulePaths.runtime) + ");\n\n";
 		loaderContext.callback(null, runtime + tmplFunc.toString() + ";\nmodule.exports = template;");
