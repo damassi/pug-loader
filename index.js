@@ -9,10 +9,13 @@ module.exports = function(source) {
 
 	var modulePaths = {};
 	modulePaths.pug = require.resolve("pug");
+	modulePaths.jade = require.resolve("jade");
 	modulePaths.load = nodeResolve("pug-load", {basedir: dirname(modulePaths.pug)});
 	modulePaths.runtime = nodeResolve("pug-runtime", {basedir: dirname(modulePaths.pug)});
 
-	var pug = require(modulePaths.pug);
+	// FIXME: Remap to jade for time being
+	// var pug = require(modulePaths.pug);
+	var jade = require(modulePaths.jade);
 	var load = require(modulePaths.load);
 
 	var req = loaderUtils.getRemainingRequest(this).replace(/^!/, "");
@@ -134,7 +137,7 @@ module.exports = function(source) {
 	run();
 	function run() {
 		try {
-			var tmplFunc = pug.compileClient(source, {
+			var tmplFunc = jade.compileClient(source, {
 				filename: req,
 				doctype: query.doctype || "html",
 				pretty: query.pretty,
